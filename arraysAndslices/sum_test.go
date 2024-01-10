@@ -1,16 +1,19 @@
 package main
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestSum(t *testing.T) {
-	// t.Run("Collection of 5 numbers", func(t *testing.T) {
-	// 	numbers := []int{1, 2, 3, 4, 5}
-	//
-	// 	got := Sum(numbers)
-	// 	want := 15
-	//
-	// 	assertCorrectMessage(t, got, want, numbers)
-	// })
+	t.Run("Collection of 5 numbers", func(t *testing.T) {
+		numbers := []int{1, 2, 3, 4, 5}
+
+		got := Sum(numbers)
+		want := 15
+
+		assertCorrectMessage(t, got, want, numbers)
+	})
 
 	t.Run("Collection of any size numbers", func(t *testing.T) {
 		numbers := []int{1, 2, 3}
@@ -22,12 +25,43 @@ func TestSum(t *testing.T) {
 	})
 }
 
+func TestSumAll(t *testing.T) {
+	got := SumAll([]int{1, 2}, []int{0, 9})
+	want := []int{3, 9}
+
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("got %v want %v", got, want)
+	}
+}
+
+func TestSumAllTails(t *testing.T) {
+	t.Run("Make the sums of some slices", func(t *testing.T) {
+		got := SumAllTails([]int{1, 2}, []int{0, 9})
+		want := []int{2, 9}
+
+		assertCorrectMessageSlice(t, got, want)
+	})
+
+	t.Run("Safely sum empty slices", func(t *testing.T) {
+		got := SumAllTails([]int{}, []int{3, 4, 5})
+		want := []int{0, 9}
+
+		assertCorrectMessageSlice(t, got, want)
+	})
+}
+
 func assertCorrectMessage(t testing.TB, got int, want int, numbers []int) {
-	// Tells the test suite that the method is a helper.
-	// Will provide line number inside of failed function on fail
 	t.Helper()
 
 	if got != want {
 		t.Errorf("got %d want %d given, %v", got, want, numbers)
+	}
+}
+
+func assertCorrectMessageSlice(t testing.TB, got []int, want []int) {
+	t.Helper()
+
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("got %v want %v", got, want)
 	}
 }
