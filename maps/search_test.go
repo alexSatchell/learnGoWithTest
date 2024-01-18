@@ -15,17 +15,29 @@ func TestSearch(t *testing.T) {
 	t.Run("Search unknown word", func(t *testing.T) {
 		_, got := dictionary.Search("unknown")
 
-		asserError(t, got, ErrNotFound)
+		assertError(t, got, ErrNotFound)
 	})
 }
 
 func TestAdd(t *testing.T) {
-	dictionary := Dictionary{}
-	word := "test"
-	definition := "this is just a test"
+	t.Run("add new word", func(t *testing.T) {
+		dictionary := Dictionary{}
+		word := "test"
+		definition := "this is just a test"
 
-	dictionary.Add(word, definition)
-	asserDefinition(t, dictionary, word, definition)
+		dictionary.Add(word, definition)
+		asserDefinition(t, dictionary, word, definition)
+	})
+
+	t.Run("add existing word", func(t *testing.T) {
+		word := "test"
+		definition := "this is just a test"
+		dictionary := Dictionary{word: definition}
+		err := dictionary.Add(word, "new test")
+
+		assertError(t, err, ErrWordExists)
+		asserDefinition(t, dictionary, word, definition)
+	})
 }
 
 // helpers
@@ -37,7 +49,7 @@ func assertStrings(t testing.TB, got, want string) {
 	}
 }
 
-func asserError(t testing.TB, got, want error) {
+func assertError(t testing.TB, got, want error) {
 	t.Helper()
 
 	if got != want {
