@@ -16,7 +16,7 @@ const (
 
 func Hello(name string, language string) string {
 	if name == "" {
-		name = "World"
+		name = "Linux"
 	}
 
 	prefix := englishHelloPrefix
